@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <!-- 上传图片，之后在页面上展示图片 -->
+  <input type="file" name="logo" id="file">
+  <button onclick="doUpload()">提交</button>
+  <img src="" alt="">
+  <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+  <script>
+    function doUpload(){
+      console.log(1)
+      let file = $("#file").get(0).files[0] //获取提交的图片的信息
+      let formdata = new FormData(); //创建一个空的FormData对象
+      formdata.append('logo',file)  //第一个参数为upload.single('logo')中的single值，第二个参数为图片的信息
+      console.log(file)
+      $.ajax({
+        url:'http://localhost:3000/file/upload',
+        type:'POST',
+        cache:false, //不必需
+        data:formdata,
+        processData:false,//必须
+        contentType:false,//必需
+        success:function(data){
+          console.log(data)
+          if(data.err == 0){
+            $("img").attr("src",`http://localhost:3000${data.img}`)
+          }else{
+            alert("上传失败请重试！")
+          }
+        }
+      })
+    }
+  </script>
+</body>
+
+</html>
